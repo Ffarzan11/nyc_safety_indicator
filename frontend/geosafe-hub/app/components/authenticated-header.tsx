@@ -3,7 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { Bell, User, LogOut, Menu, X, MenuSquare } from "lucide-react"
+import { User, LogOut, Menu, X, MenuSquare } from "lucide-react"
 import { useAuth } from "../context/auth-context"
 import MapPopup from "./map-popup"
 import RightSidebar from "./right-sidebar"
@@ -40,10 +40,10 @@ export default function AuthenticatedHeader() {
                 Features
               </Link>
               <Link
-                href="/safety-profile"
+                href="/safety-report"
                 className="px-3 py-2 rounded-md text-white hover:bg-white/10 transition-colors"
               >
-                Safety Profile
+                Safety Report
               </Link>
               <Link href="/about" className="px-3 py-2 rounded-md text-white hover:bg-white/10 transition-colors">
                 About
@@ -96,11 +96,11 @@ export default function AuthenticatedHeader() {
                   Features
                 </Link>
                 <Link
-                  href="/safety-profile"
+                  href="/safety-report"
                   className="block px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100"
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  Safety Profile
+                  Safety Report
                 </Link>
                 <Link
                   href="/about"
@@ -174,11 +174,8 @@ export default function AuthenticatedHeader() {
             <Link href="/dashboard" className="px-3 py-2 rounded-md text-white hover:bg-white/10 transition-colors">
               Dashboard
             </Link>
-            <Link
-              href="/dashboard/saved-locations"
-              className="px-3 py-2 rounded-md text-white hover:bg-white/10 transition-colors"
-            >
-              Saved Locations
+            <Link href="/safety-report" className="px-3 py-2 rounded-md text-white hover:bg-white/10 transition-colors">
+              Safety Report
             </Link>
             <Link href="/about" className="px-3 py-2 rounded-md text-white hover:bg-white/10 transition-colors">
               About
@@ -194,12 +191,7 @@ export default function AuthenticatedHeader() {
           >
             <MenuSquare className="h-6 w-6" />
           </button>
-          {/* And in the authenticated header section, remove: */}
-          {/* <HeaderMapButton /> */}
-          <button className="relative text-white hover:text-blue-300 transition-colors">
-            <Bell className="h-6 w-6" />
-            <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-500 ring-2 ring-black/30"></span>
-          </button>
+          {/* Removed bell notification icon */}
 
           <div className="relative">
             <button
@@ -281,11 +273,11 @@ export default function AuthenticatedHeader() {
                 Dashboard
               </Link>
               <Link
-                href="/dashboard/saved-locations"
+                href="/safety-report"
                 className="block px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Saved Locations
+                Safety Report
               </Link>
               <Link
                 href="/about"
@@ -300,13 +292,6 @@ export default function AuthenticatedHeader() {
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Emergency Contacts
-              </Link>
-              <Link
-                href="/safety-report"
-                className="block px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Safety Report
               </Link>
               <Link
                 href="/dashboard/profile"

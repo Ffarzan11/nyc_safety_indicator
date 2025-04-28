@@ -5,7 +5,7 @@ import type React from "react"
 import { useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { Home, User, LogOut, Menu, X, Star, Phone, BarChart3 } from "lucide-react"
+import { Home, User, LogOut, Menu, X, Star } from "lucide-react"
 import { usePathname } from "next/navigation"
 
 export default function DashboardLayout({
@@ -19,8 +19,6 @@ export default function DashboardLayout({
   const navigation = [
     { name: "Overview", href: "/dashboard", icon: Home },
     { name: "Saved Locations", href: "/dashboard/saved-locations", icon: Star },
-    { name: "Emergency Contacts", href: "/dashboard/emergency-contacts", icon: Phone },
-    { name: "Safety Reports", href: "/dashboard/reports", icon: BarChart3 },
     { name: "Profile & Settings", href: "/dashboard/profile", icon: User },
   ]
 
