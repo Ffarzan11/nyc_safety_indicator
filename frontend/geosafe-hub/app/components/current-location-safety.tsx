@@ -178,10 +178,7 @@ export default function CurrentLocationSafety() {
       const data = await response.json();
       const addressObj = data.address || {};
       const neighborhood =
-        addressObj.neighbourhood ||
-        addressObj.suburb ||
-        addressObj.district ||
-        "Unknown Area";
+        addressObj.neighbourhood ;
 
       const city =
         addressObj.city || addressObj.town || addressObj.village || "";
@@ -231,7 +228,7 @@ export default function CurrentLocationSafety() {
 
         await AxiosInstance.post(
           "/emergency/sendAlert/",
-          { location: neighborhood || "Unknown" },
+          { location: neighborhood },
           {
             headers: {
               Authorization: `Bearer ${authToken}`,
