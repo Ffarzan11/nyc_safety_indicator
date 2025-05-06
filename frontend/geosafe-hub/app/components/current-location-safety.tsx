@@ -232,9 +232,7 @@ const fetchAddressAndNeighborhood = async (
         : data.display_name ||
           `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`;
 
-    console.log("Selected neighborhood:", neighborhood);
-    console.log("Formatted address:", formattedAddress);
-
+  
     const updatedLocationData = {
       ...(locationData || { latitude, longitude }),
       address: formattedAddress,
