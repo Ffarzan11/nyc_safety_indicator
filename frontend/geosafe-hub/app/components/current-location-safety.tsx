@@ -160,66 +160,97 @@ export default function CurrentLocationSafety() {
       setTimeout(() => loadDemoLocation(), 500);
     }
   };
+const fetchAddressAndNeighborhood = async (
+  latitude: number,
+  longitude: number
+) => {
+  try {
+    // Using a more detailed query with higher zoom level to get more detailed results
+    const url = `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json&zoom=18&addressdetails=1`;
+    const response = await fetch(url, {
+      headers: { "User-Agent": "SafetyApp/1.0" },
+    });
 
-  // Replace your existing fetchAddressAndNeighborhood function with this:
-  const fetchAddressAndNeighborhood = async (
-    latitude: number,
-    longitude: number
-  ) => {
-    try {
-      const url = `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`;
-      const response = await fetch(url, {
-        headers: { "User-Agent": "SafetyApp/1.0" },
-      });
-
-      if (!response.ok) {
-        throw new Error(`Geocoding API error: ${response.status}`);
-      }
-
-      const data = await response.json();
-      const addressObj = data.address || {};
-
-      // Fix: Use multiple possible fields for neighborhood with proper fallbacks
-      const neighborhood =
-        addressObj.neighbourhood ||
-        addressObj.suburb ||
-        addressObj.district ||
-        addressObj.quarter ||
-        addressObj.hamlet ||
-        "Unknown Area";
-
-      const city =
-        addressObj.city || addressObj.town || addressObj.village || "";
-      const state = addressObj.state || "";
-      const formattedAddress = [neighborhood, city, state]
-        .filter(Boolean)
-        .join(", ");
-
-      const updatedLocationData = {
-        ...(locationData || { latitude, longitude }),
-        address: formattedAddress,
-        neighborhood: neighborhood,
-      };
-
-      setLocationData(updatedLocationData);
-
-      // Now pass the neighborhood we found to the safety score API
-      fetchSafetyScoreFromAPI(latitude, longitude, neighborhood);
-
-      // Log the address data for debugging
-      console.log("Address data found:", {
-        neighborhood,
-        addressObj,
-        formattedAddress,
-      });
-    } catch (error) {
-      console.error("Error fetching address and neighborhood:", error);
-      setError(
-        "Unable to determine your exact location. Showing approximate safety data."
-      );
-      fetchSafetyScoreFromAPI(latitude, longitude);
+    if (!response.ok) {
+      throw new Error(`Geocoding API error: ${response.status}`);
     }
-  };
+
+    const data = await response.json();
+    console.log("Full API response:", data); // Log the entire response
+
+    const addressObj = data.address || {};
+    console.log("Address object:", addressObj); // Log the address object separately
+
+    // Check each relevant field for debugging
+    console.log("Available location fields:", {
+      neighbourhood: addressObj.neighbourhood,
+      suburb: addressObj.suburb,
+      district: addressObj.district,
+      quarter: addressObj.quarter,
+      hamlet: addressObj.hamlet,
+      county: addressObj.county,
+      city: addressObj.city,
+      town: addressObj.town,
+      village: addressObj.village,
+      road: addressObj.road,
+      display_name: data.display_name,
+    });
+
+    // Enhanced hierarchy for picking the best neighborhood name
+    const neighborhood =
+      addressObj.neighbourhood ||
+      addressObj.suburb ||
+      addressObj.district ||
+      addressObj.quarter ||
+      addressObj.hamlet ||
+      addressObj.city_district ||
+      addressObj.town ||
+      addressObj.village ||
+      (addressObj.road ? `${addressObj.road} area` : null) ||
+      (addressObj.county ? `${addressObj.county} area` : null) ||
+      (data.display_name ? data.display_name.split(",")[0] : "Unknown Area");
+
+    const city =
+      addressObj.city ||
+      addressObj.town ||
+      addressObj.village ||
+      addressObj.county ||
+      "";
+    const state = addressObj.state || "";
+
+    // Build a better formatted address using more available info
+    const addressParts = [];
+    if (addressObj.road) addressParts.push(addressObj.road);
+    if (neighborhood && neighborhood !== addressObj.road + " area")
+      addressParts.push(neighborhood);
+    if (city && city !== neighborhood) addressParts.push(city);
+    if (state && state !== city) addressParts.push(state);
+
+    const formattedAddress =
+      addressParts.length > 0
+        ? addressParts.join(", ")
+        : data.display_name ||
+          `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`;
+
+    console.log("Selected neighborhood:", neighborhood);
+    console.log("Formatted address:", formattedAddress);
+
+    const updatedLocationData = {
+      ...(locationData || { latitude, longitude }),
+      address: formattedAddress,
+      neighborhood: neighborhood,
+    };
+
+    setLocationData(updatedLocationData);
+    fetchSafetyScoreFromAPI(latitude, longitude, neighborhood);
+  } catch (error) {
+    console.error("Error fetching address and neighborhood:", error);
+    setError(
+      "Unable to determine your exact location. Showing approximate safety data."
+    );
+    fetchSafetyScoreFromAPI(latitude, longitude);
+  }
+};
   const fetchSafetyScoreFromAPI = async (
     latitude: number,
     longitude: number,
