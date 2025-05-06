@@ -161,6 +161,7 @@ export default function CurrentLocationSafety() {
     }
   };
 
+  // Replace your existing fetchAddressAndNeighborhood function with this:
   const fetchAddressAndNeighborhood = async (
     latitude: number,
     longitude: number
@@ -177,8 +178,15 @@ export default function CurrentLocationSafety() {
 
       const data = await response.json();
       const addressObj = data.address || {};
+
+      // Fix: Use multiple possible fields for neighborhood with proper fallbacks
       const neighborhood =
-        addressObj.neighbourhood ;
+        addressObj.neighbourhood ||
+        addressObj.suburb ||
+        addressObj.district ||
+        addressObj.quarter ||
+        addressObj.hamlet ||
+        "Unknown Area";
 
       const city =
         addressObj.city || addressObj.town || addressObj.village || "";
@@ -194,7 +202,16 @@ export default function CurrentLocationSafety() {
       };
 
       setLocationData(updatedLocationData);
+
+      // Now pass the neighborhood we found to the safety score API
       fetchSafetyScoreFromAPI(latitude, longitude, neighborhood);
+
+      // Log the address data for debugging
+      console.log("Address data found:", {
+        neighborhood,
+        addressObj,
+        formattedAddress,
+      });
     } catch (error) {
       console.error("Error fetching address and neighborhood:", error);
       setError(
@@ -203,7 +220,6 @@ export default function CurrentLocationSafety() {
       fetchSafetyScoreFromAPI(latitude, longitude);
     }
   };
-
   const fetchSafetyScoreFromAPI = async (
     latitude: number,
     longitude: number,
