@@ -198,6 +198,7 @@ const fetchAddressAndNeighborhood = async (
 
     // Enhanced hierarchy for picking the best neighborhood name
     const neighborhood =
+      addressObj.amenity ||
       addressObj.neighbourhood ||
       addressObj.suburb ||
       addressObj.district ||
@@ -206,11 +207,13 @@ const fetchAddressAndNeighborhood = async (
       addressObj.city_district ||
       addressObj.town ||
       addressObj.village ||
+      (addressObj.amenity ? `${addressObj.amenity} ` : null) ||
       (addressObj.road ? `${addressObj.road} area` : null) ||
       (addressObj.county ? `${addressObj.county} area` : null) ||
       (data.display_name ? data.display_name.split(",")[0] : "Unknown Area");
 
-    const city =
+    const city = 
+      addressObj.amenity ||
       addressObj.city ||
       addressObj.town ||
       addressObj.village ||
