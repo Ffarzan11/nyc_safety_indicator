@@ -14,6 +14,7 @@ This project evaluates the safety of different regions in New York City using of
 
 ## Deployed Version
 Try the project here 🚨
+https://nycsafetyindicator.vercel.app/
 
 ## UI
 
