@@ -44,6 +44,8 @@ This dataset contains details of all arrests made by the NYPD in NYC during the 
 5. Scikit-Learn
 6. Panda
 7. Supabase
+8. vercel
+9. Digital Ocean
 
 ## External APIs Used
 1. Mapbox
