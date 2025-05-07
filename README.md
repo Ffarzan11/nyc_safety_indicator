@@ -13,7 +13,7 @@ This project evaluates the safety of different regions in New York City using of
 | Johnny Wang         | Model Developer             |
 
 ## Deployed Version
-Try the project here 🚨
+Try the project here 🚨 <br>
 https://nycsafetyindicator.vercel.app/
 
 ## UI
