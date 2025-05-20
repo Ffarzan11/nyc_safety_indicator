@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
 import { ArrowDown, ArrowUp, Medal, AlertCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
@@ -14,11 +15,12 @@ type NeighborhoodSafety = {
 export default function SafetyLeaderboard() {
   const [neighborhoods, setNeighborhoods] = useState<NeighborhoodSafety[]>([])
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc")
+  const router = useRouter()
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await AxiosInstanceAny.get("/safety/all-neighborhoods-scores/")
+        const res = await AxiosInstanceAny.get("/api/safety/all-neighborhoods-scores/")
         const data = res.data
 
         const formatted: NeighborhoodSafety[] = Object.entries(data).map(([name, score]) => ({
@@ -41,6 +43,11 @@ export default function SafetyLeaderboard() {
 
   const toggleSortOrder = () => {
     setSortOrder(sortOrder === "desc" ? "asc" : "desc")
+  }
+
+  const handleSelectNeighborhood = (location: string) => {
+    router.push(`/safety-report?location=${encodeURIComponent(location)}`)
+    window.location.reload()
   }
 
   const getScoreColor = (score: number) => {
@@ -82,7 +89,11 @@ export default function SafetyLeaderboard() {
       <div className="p-5">
         <div className="space-y-4">
           {sortedNeighborhoods.map((neighborhood, index) => (
-            <div key={neighborhood.name} className="grid grid-cols-[auto_1fr_auto] gap-4 items-center">
+            <div
+              key={neighborhood.name}
+              onClick={() => handleSelectNeighborhood(neighborhood.name)}
+              className="grid grid-cols-[auto_1fr_auto] gap-4 items-center cursor-pointer hover:bg-gray-900 rounded-md p-2 transition-all"
+            >
               <div
                 className={cn(
                   "flex items-center justify-center w-8 h-8 rounded-full font-medium text-sm",
