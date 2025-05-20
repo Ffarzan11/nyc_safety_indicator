@@ -8,6 +8,7 @@ import { Suspense } from "react";
 import TestimonialMarquee from "./components/testimonial-marquee";
 import HeaderMapButton from "./components/header-map-button";
 import SearchBar from "./components/SearchBar";
+import SafetyLeaderboard from "./components/safety-leaderboard";
 
 // Import the NewsHeadlines component at the top of the file
 import NewsHeadlines from "./components/news-headlines";
@@ -84,7 +85,11 @@ export default function Home() {
               <CurrentLocationSafety />
             </div>
             {/* The grid of locations should follow after this */}
-
+            {/* Safety leaderboard: */}
+            <div className="mt-8">
+               <SafetyLeaderboard />
+            </div>
+            
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
               <div className="border border-white/20 rounded-lg p-6 flex flex-col items-center bg-black/30 backdrop-blur-sm">
                 <div className="mb-2">
