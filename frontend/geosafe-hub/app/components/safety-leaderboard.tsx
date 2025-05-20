@@ -1,0 +1,117 @@
+"use client"
+
+import { useState } from "react"
+import { ArrowDown, ArrowUp, Medal, AlertCircle } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
+
+type NeighborhoodSafety = {
+  name: string
+  score: number
+}
+
+export default function SafetyLeaderboard() {
+  // Sample data from the API
+  const safetyData: Record<string, number> = {
+    "East Harlem North": 37.245851925006136,
+    Highbridge: 61.55074022910022,
+    "Upper East Side-Yorkville": 100.0,
+    "East New York-New Lots": 39.89129169501471,
+    "Midtown-Times Square": 100.0,
+    "Forest Hills": 91.58693182434338,
+    "Baisley Park": 56.47616245936473,
+    Morrisania: 68.05214733491805,
+    "Midtown South-Flatiron-Union Square": 100.0,
+    "University Heights North-Fordham": 38.28215110380719,
+    "Tribeca-Civic Center": 44.56259898844111,
+    "Hunts Point": 92.8181935758599,
+  }
+
+  // Convert to array and sort by score (descending)
+  const neighborhoods: NeighborhoodSafety[] = Object.entries(safetyData).map(([name, score]) => ({
+    name,
+    score,
+  }))
+
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc")
+  const sortedNeighborhoods = [...neighborhoods].sort((a, b) =>
+    sortOrder === "desc" ? b.score - a.score : a.score - b.score,
+  )
+
+  const toggleSortOrder = () => {
+    setSortOrder(sortOrder === "desc" ? "asc" : "desc")
+  }
+
+  const getScoreColor = (score: number) => {
+    if (score >= 80) return "bg-blue-500"
+    if (score >= 60) return "bg-blue-400"
+    if (score >= 40) return "bg-blue-300"
+    return "bg-blue-200"
+  }
+
+  return (
+    <div className="w-full max-w-3xl mx-auto backdrop-blur-md bg-black/40 rounded-lg border border-gray-800 shadow-xl overflow-hidden">
+      <div className="p-5 border-b border-gray-800">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <AlertCircle className="h-5 w-5 text-blue-400" />
+            <div>
+              <h2 className="text-2xl font-semibold text-white">NYC Neighborhood Safety Index</h2>
+              <p className="text-gray-400">Ranking neighborhoods by safety score</p>
+            </div>
+          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={toggleSortOrder}
+            className="flex items-center gap-1 bg-transparent border-gray-700 text-gray-300 hover:bg-gray-800 hover:text-white"
+          >
+            {sortOrder === "desc" ? (
+              <>
+                Highest First <ArrowDown className="h-4 w-4" />
+              </>
+            ) : (
+              <>
+                Lowest First <ArrowUp className="h-4 w-4" />
+              </>
+            )}
+          </Button>
+        </div>
+      </div>
+      <div className="p-5">
+        <div className="space-y-4">
+          {sortedNeighborhoods.map((neighborhood, index) => (
+            <div key={neighborhood.name} className="grid grid-cols-[auto_1fr_auto] gap-4 items-center">
+              <div
+                className={cn(
+                  "flex items-center justify-center w-8 h-8 rounded-full font-medium text-sm",
+                  index < 3 ? "bg-gray-800" : "bg-gray-800/50",
+                )}
+              >
+                {index === 0 && sortOrder === "desc" ? (
+                  <Medal className="h-5 w-5 text-yellow-500" />
+                ) : index === 1 && sortOrder === "desc" ? (
+                  <Medal className="h-5 w-5 text-gray-400" />
+                ) : index === 2 && sortOrder === "desc" ? (
+                  <Medal className="h-5 w-5 text-amber-700" />
+                ) : (
+                  <span className="text-gray-300">{index + 1}</span>
+                )}
+              </div>
+              <div className="space-y-1.5">
+                <div className="font-medium text-white">{neighborhood.name}</div>
+                <div className="h-2 w-full bg-gray-800 rounded-full overflow-hidden">
+                  <div
+                    className={cn("h-full rounded-full", getScoreColor(neighborhood.score))}
+                    style={{ width: `${neighborhood.score}%` }}
+                  />
+                </div>
+              </div>
+              <div className="font-medium tabular-nums text-blue-400">{neighborhood.score.toFixed(1)}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
