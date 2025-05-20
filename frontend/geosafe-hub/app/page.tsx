@@ -90,40 +90,6 @@ export default function Home() {
                <SafetyLeaderboard />
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-              <div className="border border-white/20 rounded-lg p-6 flex flex-col items-center bg-black/30 backdrop-blur-sm">
-                <div className="mb-2">
-                  <MapPin className="w-8 h-8 text-blue-400" />
-                </div>
-                <h3 className="text-2xl font-bold mb-2">Bronx</h3>
-                <div className="flex items-center">
-                  <Shield className="w-5 h-5 text-green-500 mr-2" />
-                  <span className="text-lg">55 Safety Score</span>
-                </div>
-              </div>
-
-              <div className="border border-white/20 rounded-lg p-6 flex flex-col items-center bg-black/30 backdrop-blur-sm">
-                <div className="mb-2">
-                  <MapPin className="w-8 h-8 text-blue-400" />
-                </div>
-                <h3 className="text-2xl font-bold mb-2">Manhattan</h3>
-                <div className="flex items-center">
-                  <Shield className="w-5 h-5 text-green-500 mr-2" />
-                  <span className="text-lg">73 Safety Score</span>
-                </div>
-              </div>
-
-              <div className="border border-white/20 rounded-lg p-6 flex flex-col items-center bg-black/30 backdrop-blur-sm">
-                <div className="mb-2">
-                  <MapPin className="w-8 h-8 text-blue-400" />
-                </div>
-                <h3 className="text-2xl font-bold mb-2">Queens</h3>
-                <div className="flex items-center">
-                  <Shield className="w-5 h-5 text-green-500 mr-2" />
-                  <span className="text-lg">60 Safety Score</span>
-                </div>
-              </div>
-            </div>
 
             {/* Only show these sections to non-authenticated users */}
             {!isAuthenticated && (
