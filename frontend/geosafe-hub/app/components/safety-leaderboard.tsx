@@ -1,9 +1,10 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { ArrowDown, ArrowUp, Medal, AlertCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
+import AxiosInstanceAny from "@/components/AxiosInstanceAny"
 
 type NeighborhoodSafety = {
   name: string
@@ -11,29 +12,29 @@ type NeighborhoodSafety = {
 }
 
 export default function SafetyLeaderboard() {
-  // Sample data from the API
-  const safetyData: Record<string, number> = {
-    "East Harlem North": 37.245851925006136,
-    Highbridge: 61.55074022910022,
-    "Upper East Side-Yorkville": 100.0,
-    "East New York-New Lots": 39.89129169501471,
-    "Midtown-Times Square": 100.0,
-    "Forest Hills": 91.58693182434338,
-    "Baisley Park": 56.47616245936473,
-    Morrisania: 68.05214733491805,
-    "Midtown South-Flatiron-Union Square": 100.0,
-    "University Heights North-Fordham": 38.28215110380719,
-    "Tribeca-Civic Center": 44.56259898844111,
-    "Hunts Point": 92.8181935758599,
-  }
-
-  // Convert to array and sort by score (descending)
-  const neighborhoods: NeighborhoodSafety[] = Object.entries(safetyData).map(([name, score]) => ({
-    name,
-    score,
-  }))
-
+  const [neighborhoods, setNeighborhoods] = useState<NeighborhoodSafety[]>([])
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc")
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await AxiosInstanceAny.get("/api/safety/all-neighborhoods-scores/")
+        const data = res.data
+
+        const formatted: NeighborhoodSafety[] = Object.entries(data).map(([name, score]) => ({
+          name,
+          score: Number(score),
+        }))
+
+        setNeighborhoods(formatted)
+      } catch (error) {
+        console.error("Failed to fetch safety data:", error)
+      }
+    }
+
+    fetchData()
+  }, [])
+
   const sortedNeighborhoods = [...neighborhoods].sort((a, b) =>
     sortOrder === "desc" ? b.score - a.score : a.score - b.score,
   )
