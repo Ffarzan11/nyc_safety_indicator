@@ -20,7 +20,7 @@ export default function SafetyLeaderboard() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await AxiosInstanceAny.get("/api/safety/all-neighborhoods-scores/")
+        const res = await AxiosInstanceAny.get("/safety/all-neighborhoods-scores/")
         const data = res.data
 
         const formatted: NeighborhoodSafety[] = Object.entries(data).map(([name, score]) => ({
