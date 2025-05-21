@@ -6,7 +6,7 @@ This project evaluates the safety of different regions in New York City using of
 ## Team
 | Name                | Role                        |
 |---------------------|-----------------------------|
-| Farhikhta Farzan    | Fullstack Developer         |
+| Farhikhta Farzan    | Backend Developer         |
 | Sabeha Khan         | Backend and Model Developer |
 | Aaleia Fernando     | Frontend Developer          |
 | Mohammed Bensassi   | Frontend Developer          |
