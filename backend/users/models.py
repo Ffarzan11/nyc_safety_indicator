@@ -15,7 +15,7 @@ class CustomUserManager(BaseUserManager):
         email = self.normalize_email(email)
         user = self.model(first_name=first_name, last_name=last_name, email=email, **extra_fields)
         user.set_password(password)
-        user.save(using=self._db)  # ✅ Fixed `self.db` to `self._db`
+        user.save(using=self._db)  
         return user
     
     def create_superuser(self, first_name, last_name, email, password=None, **extra_fields):
@@ -36,7 +36,6 @@ class CustomUser(AbstractUser):
     email = models.EmailField(max_length=200, unique=True)
     username = models.CharField(max_length=200, null=True, blank=True, unique=True)
 
-    # ✅ Fix reverse accessor name conflict
     groups = models.ManyToManyField(
         'auth.Group',
         related_name='custom_user_groups',
